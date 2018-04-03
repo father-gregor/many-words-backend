@@ -18,7 +18,8 @@
     }
   ],
   "scripts": {
-    "start": "nodemon ./bin/server.dev.js"
+    "start": "node ./bin/server.dev.js",
+    "dev": "nodemon ./bin/server.dev.js"
   },
   "private": true,
   "dependencies": {
