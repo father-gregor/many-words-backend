@@ -1,0 +1,8 @@
+{
+    "randomWords": {
+        "wildcard": {
+            "min": 4,
+            "max": 10
+        }
+    }
+}
