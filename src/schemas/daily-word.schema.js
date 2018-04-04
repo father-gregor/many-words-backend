@@ -35,4 +35,4 @@ function transformJson (doc, ret) {
 
 DailyWordSchema.set('toJSON', {transform: transformJson});
 
-module.exports = new mongoose.Schema(DailyWordSchema);
+module.exports = DailyWordSchema;
