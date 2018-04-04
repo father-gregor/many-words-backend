@@ -9,6 +9,7 @@ const request = require("request");
 
 const mongoDb = require("./src/database/mongodb.connection");
 const apiTestingRoutes = require("./src/routing/app-testing.routes");
+const wordsRoutes = require("./src/routing/words.routes");
 
 mongoDb.connectToDb();
 
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({"extended": "false"}));
 app.use(express.static(path.join(__dirname, "dist")));
 
 app.use("/api/testing", apiTestingRoutes);
+app.use("/api/words", wordsRoutes);
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
