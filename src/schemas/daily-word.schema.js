@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DailyWordSchema = {
+const DailyWordSchema = new mongoose.Schema({
     word: {
         type: String,
         required: true,
@@ -27,6 +27,12 @@ const DailyWordSchema = {
         type: Date,
         default: Date.now()
     }
-};
+});
+
+function transformJson (doc, ret) {
+    delete ret.__v;
+}
+
+DailyWordSchema.set('toJSON', {transform: transformJson});
 
 module.exports = new mongoose.Schema(DailyWordSchema);

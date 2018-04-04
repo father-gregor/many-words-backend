@@ -7,10 +7,10 @@ const DailyWord = Models.DailyWord;
 async function testDatabaseConnection (req, res) {
     try {
         await DailyWord.create({
-            word: "silage",
-            definition: "Fodder prepared by storing and fermenting green forage plants in a silo",
+            word: "informationless",
+            definition: "Devoid of information; meaningless",
             language: "en",
-            publishDateUTC: new Date(Date.UTC(2018, 4, 5))
+            publishDateUTC: new Date(Date.UTC(2018, 3, 5))
         });
     
         let dailyWords = await DailyWord.find().exec();
