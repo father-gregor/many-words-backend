@@ -14,9 +14,9 @@ const DatamuseApi = require("../../config/datamuse-api.values.json");
 async function getRandomWord (req, res) {
     try {
         let wildcard = "";
-        let wildcardLength = utils.getRandomInt(min, max);
         let min = appValues.randomWords.wildcard.min;
         let max = appValues.randomWords.wildcard.max;
+        let wildcardLength = utils.getRandomInt(min, max);
 
         // TODO Optimize process to append two-three symbols prefix for more randomized result
         for (let i = 0; i < wildcardLength; i++) {
