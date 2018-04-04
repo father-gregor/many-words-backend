@@ -44,7 +44,7 @@ async function getRandomWord (req, res) {
 }
 
 function _getWordDefinition (def) {
-    return def && def.replace(/^.+\\t/g, "");
+    return def && def.replace(/^.+?\s+?/, "");
 }
 
 module.exports = {
