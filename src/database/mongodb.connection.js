@@ -1,7 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const schemas = require("./mongoose.schemas");
+const schemas = require("./mongoose.models");
 
 module.exports = {
     connectToDb: function () {
