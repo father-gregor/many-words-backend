@@ -1,5 +1,3 @@
-import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from "constants";
-
 "use strict";
 
 const rpn = require("request-promise-native");
