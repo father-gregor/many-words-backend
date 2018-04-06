@@ -1,6 +1,7 @@
 "use strict";
 
 const rpn = require("request-promise-native");
+const striptags = require("striptags");
 const appValues = require("../../config/app.values.json");
 const utils = require("../utils/utils");
 const ExternalApi = require("../../config/external-api.values.json");
@@ -43,14 +44,14 @@ async function getRandomWord (req, res) {
     }
 }
 
-async function getMemeWord () {
+async function getMemeWord (req, res) {
     try {
         //First group - word, second group - definition
         let memeWordRegExp = /<a class="word".+?>(.+?)<\/a>.+<div class="meaning".*?>(.+?)<\/div>/mi;
 
         let query = {};
         for (let param of ExternalApi.memeWords.queryParams) {
-            query[param.name] = param.value;
+            query[param.name] = utils.getRandomInt(param.value, param.value * 10);
         }
 
         // If we define "page" value bigger than 1000 (that value maybe going to change or increase in future) every request would give us random word
@@ -61,10 +62,11 @@ async function getMemeWord () {
         console.log(html);
         console.log(typeof html);
         let resultMatch = memeWordRegExp.exec(html);
-        res.json({
-            name: resultMatch[0],
-            def: resultMatch[1]
-        })
+        console.log(resultMatch);
+        res.json(resultMatch ? {
+            name: utils.escapeHtml(striptags(resultMatch[1])),
+            def: utils.escapeHtml(striptags(resultMatch[2]))
+        } : {});
     } catch (err) {
         console.error(err);
         res.status(500).send();
