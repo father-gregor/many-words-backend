@@ -1,9 +1,11 @@
+import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from "constants";
+
 "use strict";
 
 const rpn = require("request-promise-native");
 const appValues = require("../../config/app.values.json");
 const utils = require("../utils/utils");
-const DatamuseApi = require("../../config/datamuse-api.values.json");
+const ExternalApi = require("../../config/external-api.values.json");
 
 /**
  * Query params: 
@@ -23,7 +25,7 @@ async function getRandomWord (req, res) {
             wildcard = wildcard + "?";
         }
         let randomWords = await rpn.get({
-            url: DatamuseApi.randomWords,
+            url: ExternalApi.randomWords.url,
             qs: {
                 sp: wildcard,
                 md: "d"
@@ -43,10 +45,39 @@ async function getRandomWord (req, res) {
     }
 }
 
+async function getMemeWord () {
+    try {
+        //First group - word, second group - definition
+        let memeWordRegExp = /<a class="word".+?>(.+?)<\/a>.+<div class="meaning".*?>(.+?)<\/div>/mi;
+
+        let query = {};
+        for (let param of ExternalApi.memeWords.queryParams) {
+            query[param.name] = param.value;
+        }
+
+        // If we define "page" value bigger than 1000 (that value maybe going to change or increase in future) every request would give us random word
+        let html = await rpn.get({
+            url: ExternalApi.memeWords.url,
+            qs: query
+        });
+        console.log(html);
+        console.log(typeof html);
+        let resultMatch = memeWordRegExp.exec(html);
+        res.json({
+            name: resultMatch[0],
+            def: resultMatch[1]
+        })
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
 function _getWordDefinition (def) {
     return def && def.replace(/^.+?\s+?/, "");
 }
 
 module.exports = {
-    getRandomWord
+    getRandomWord,
+    getMemeWord
 };

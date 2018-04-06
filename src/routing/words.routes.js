@@ -1,8 +1,9 @@
 "use strict";
 
 const router = require('express').Router();
-const randomWordsController = require("../controllers/random-words.controller");
+const wordsController = require("../controllers/words.controller");
 
-router.route("/random").get(randomWordsController.getRandomWord);
+router.route("/random").get(wordsController.getRandomWord);
+router.route("/meme").get(wordsController.getMemeWord);
 
 module.exports = router;
