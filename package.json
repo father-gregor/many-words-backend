@@ -30,7 +30,8 @@
     "morgan": "^1.9.0",
     "request": "^2.85.0",
     "request-promise-native": "^1.0.5",
-    "serve-favicon": "^2.4.5"
+    "serve-favicon": "^2.4.5",
+    "striptags": "^3.1.1"
   },
   "devDependencies": {
     "node-sass": "^4.8.3",
