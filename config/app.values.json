@@ -1,8 +1,14 @@
 {
+    "dailyWords": {
+        "partOfSpeech": ["n", "v", "adj", "adv"]
+    },
     "randomWords": {
         "wildcard": {
             "min": 4,
             "max": 10
         }
+    },
+    "memeWords": {
+        "maxApiRepeat": 3
     }
 }

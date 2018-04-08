@@ -6,6 +6,15 @@ const appValues = require("../../config/app.values.json");
 const utils = require("../utils/utils");
 const ExternalApi = require("../../config/external-api.values.json");
 
+async function getDailyWord (req, res) {
+    try {
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
 /**
  * Query params: 
  *      sp - "spelled like" words. To simulate randomness we provide random number (in some range) of wildcard symbols "?"
@@ -46,27 +55,31 @@ async function getRandomWord (req, res) {
 
 async function getMemeWord (req, res) {
     try {
-        //First group - word, second group - definition
+        //Zero group - complete result, first group - word, second group - definition
         let memeWordRegExp = /<a class="word".+?>(.+?)<\/a>.+<div class="meaning".*?>(.+?)<\/div>/mi;
 
-        let query = {};
-        for (let param of ExternalApi.memeWords.queryParams) {
-            query[param.name] = utils.getRandomInt(param.value, param.value * 10);
-        }
+        for (let i = 0; i < appValues.memeWords.maxApiRepeat; i++) {
+            let query = {};
+            for (let param of ExternalApi.memeWords.queryParams) {
+                query[param.name] = utils.getRandomInt(param.value, param.value * 10);
+            }
 
-        // If we define "page" value bigger than 1000 (that value maybe going to change or increase in future) every request would give us random word
-        let html = await rpn.get({
-            url: ExternalApi.memeWords.url,
-            qs: query
-        });
-        console.log(html);
-        console.log(typeof html);
-        let resultMatch = memeWordRegExp.exec(html);
-        console.log(resultMatch);
-        res.json(resultMatch ? {
-            name: utils.escapeHtml(striptags(resultMatch[1])),
-            def: utils.escapeHtml(striptags(resultMatch[2]))
-        } : {});
+            // If we define "page" value bigger than 1000 (that value maybe going to change or increase in future) every request would give us random word
+            let html = await rpn.get({
+                url: ExternalApi.memeWords.url,
+                qs: query
+            });
+
+            let resultMatch = memeWordRegExp.exec(html);
+            console.log(resultMatch);
+            if (resultMatch) {
+                i = appValues.memeWords.maxApiRepeat;
+                res.json({
+                    name: utils.escapeHtml(striptags(resultMatch[1])),
+                    def: utils.escapeHtml(striptags(resultMatch[2]))
+                });
+            }
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send();

@@ -1,26 +1,37 @@
 "use strict";
 
 const mongoose = require("mongoose");
+const appValues = require("../../config/app.values.json");
 
 const DailyWordSchema = new mongoose.Schema({
-    word: {
+    name: {
+        type: String,
+        required: true,
+        unique: true,
+        dropDups: true,
+        lowercase: true
+    },
+    definitions: [{
         type: String,
         required: true,
         lowercase: true
-    },
-    definition: {
-        type: String,
-        required: true,
-        lowercase: true
-    },
+    }],
     language: {
         type: String,
         enum: ["en"],
         required: true
     },
+    partOfSpeech: [{
+        type: String,
+        enum: appValues.dailyWords.partOfSpeech
+    }],
     publishDateUTC: {
         type: Date,
         required: true
+    },
+    archaic: {
+        type: Boolean,
+        default: false
     },
     publishTimeUTC: {
         type: Date
