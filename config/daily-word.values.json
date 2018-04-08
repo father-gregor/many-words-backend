@@ -1,0 +1,268 @@
+{
+    "words": [
+        {
+            "name": "dilemmatic",
+            "definitions": ["in logic, pertaining to or of the nature of a dilemma."],
+            "language": "en",
+            "partOfSpeech": ["adj"],
+            "publishDateUTC": "01.04.2018"
+        },
+        {
+            "name": "insolubleness",
+            "definitions": ["the quality of being insoluble."],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "02.04.2018"
+        },
+        {
+            "name": "affreighter",
+            "definitions": ["one who hires or charters a ship to transport goods."],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "03.04.2018"
+        },
+        {
+            "name": "calends",
+            "definitions": ["the day of the new moon and the first day of the month in the ancient Roman calendar."],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "04.04.2018"
+        },
+        {
+            "name": "talon",
+            "definitions": ["a sharp hooked claw especially on a bird of prey."],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "05.04.2018"
+        },
+        {
+            "name": "eloign",
+            "definitions": ["to remove or carry away to a distance, especially so as to conceal."],
+            "language": "en",
+            "archaic": true,
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "06.04.2018"
+        },
+        {
+            "name": "vat",
+            "definitions": ["A large vessel, such as a tub, cistern, or barrel, used to hold or store liquids."],
+            "language": "en",
+            "archaic": true,
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "07.04.2018"
+        },
+        {
+            "name": "fascicular",
+            "definitions": ["related to plants or animals or crystals having aciculae or needle-like parts."],
+            "language": "en",
+            "partOfSpeech": ["n", "adj"],
+            "publishDateUTC": "08.04.2018"
+        },
+        {
+            "name": "rosette",
+            "definitions": [
+                "an ornament or pattern resembling a rose that is worn as a badge of office or as recognition of having won an honor.",
+                "a cluster of leaves growing in crowded circles from a common center or crown (usually at or close to the ground).",
+                "circular window filled with tracery"
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "09.04.2018"
+        },
+        {
+            "name": "spatulate",
+            "definitions": [
+                "of a leaf shape.",
+                "having a broad rounded apex and a narrow base."
+            ],
+            "language": "en",
+            "partOfSpeech": ["adj"],
+            "publishDateUTC": "10.04.2018"
+        },
+        {
+            "name": "looter",
+            "definitions": ["one who loots, who steals during a general disturbance such as a riot or natural disaster."],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "11.04.2018"
+        },
+        {
+            "name": "barrater",
+            "definitions": [
+                "someone guilty of barratry."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "12.04.2018"
+        },
+        {
+            "name": "periclean",
+            "definitions": [
+                "of or relating to Pericles (about 495-429 b. c.), the foremost citizen and practically chief of the state of ancient Athens at her greatest period; hence, pertaining to the age of the intellectual and material preeminence of Athens."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n", "adj"],
+            "publishDateUTC": "13.04.2018"
+        },
+        {
+            "name": "podophyllin",
+            "definitions": [
+                "a bitter-tasting resin obtained from the dried root of the May apple and used in medicine as a cathartic and caustic."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "14.04.2018"
+        },
+        {
+            "name": "baetyl",
+            "definitions": [
+                "a meteorite or similar-looking rough stone thought to be of divine origin and worshipped as sacred."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "15.04.2018"
+        },
+        {
+            "name": "bedouin",
+            "definitions": [
+                "a member of a nomadic tribe of Arabs."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "16.04.2018"
+        },
+        {
+            "name": "uncongenial",
+            "definitions": [
+                "not compatible or sympathetic, as in character.",
+                "not appropriate; unsuitable"
+            ],
+            "language": "en",
+            "partOfSpeech": ["adj"],
+            "publishDateUTC": "17.04.2018"
+        },
+        {
+            "name": "photometry",
+            "definitions": [
+                "measurement of the proterties of light (especially luminous intensity).",
+                "in biology, the reactional movement, positive and negative, with an indifference point between, of organisms under changing intensity of illumination."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "18.04.2018"
+        },
+        {
+            "name": "vernal",
+            "definitions": [
+                "of or characteristic of or occurring in spring.",
+                "suggestive of youth; vigorous and fresh"
+            ],
+            "language": "en",
+            "partOfSpeech": ["adj"],
+            "publishDateUTC": "19.04.2018"
+        },
+        {
+            "name": "overcrop",
+            "definitions": [
+                "to exhaust the fertility of (land) by continuous cultivation of crops."
+            ],
+            "language": "en",
+            "partOfSpeech": ["v"],
+            "publishDateUTC": "20.04.2018"
+        },
+        {
+            "name": "septet",
+            "definitions": [
+                "a musical composition written for seven performers.",
+                "seven people considered as a unit."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "21.04.2018"
+        },
+        {
+            "name": "addressograph",
+            "definitions": [
+                "a device for producing mailing labels first produced in 1893, used in much of the 20th century."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "22.04.2018"
+        },
+        {
+            "name": "calumniation",
+            "definitions": [
+                "a false accusation of an offense or a malicious misrepresentation of someone's words or actions."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "23.04.2018"
+        },
+        {
+            "name": "convocation",
+            "definitions": [
+                "a group gathered in response to a summons."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "24.04.2018"
+        },
+        {
+            "name": "delude",
+            "definitions": [
+                "be false to; be dishonest with."
+            ],
+            "language": "en",
+            "partOfSpeech": ["v"],
+            "publishDateUTC": "25.04.2018"
+        },
+        {
+            "name": "freethinking",
+            "definitions": [
+                "the doctrine that reason is the right basis for regulating conduct."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "26.04.2018"
+        },
+        {
+            "name": "palliate",
+            "definitions": [
+                "lessen or to try to lessen the seriousness or extent of.",
+                "provide physical relief, as from pain"
+            ],
+            "language": "en",
+            "partOfSpeech": ["v"],
+            "publishDateUTC": "27.04.2018"
+        },
+        {
+            "name": "uncarved",
+            "definitions": [
+                "not having been carved or shaped with knife or other tool.",
+                "natural, unmodified, pristine"
+            ],
+            "language": "en",
+            "partOfSpeech": ["adj"],
+            "publishDateUTC": "28.04.2018"
+        },
+        {
+            "name": "arcadianism",
+            "definitions": [
+                "rustic or pastoral simplicity, especially as affected in literature; specifically, in Italian literature about the end of the seventeenth century, the affectation of classic simplicity."
+            ],
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "29.04.2018"
+        },
+        {
+            "name": "pibgorn",
+            "definitions": [
+                "an ancient (now obsolete) single-reed woodwind; usually made of bone."
+            ],
+            "archaic": true,
+            "language": "en",
+            "partOfSpeech": ["n"],
+            "publishDateUTC": "30.04.2018"
+        }
+    ]
+}
