@@ -28,6 +28,7 @@ async function getDailyWord (req, res) {
             formatDate.setUTCDate(reqDate.getDate());
             formatDate.setUTCMonth(reqDate.getMonth());
             formatDate.setUTCFullYear(reqDate.getFullYear());
+
             query["publishDateUTC"] = {
                 $lte: formatDate
             };
@@ -79,9 +80,9 @@ async function getRandomWord (req, res) {
         let finalRandomWord = randomWords[utils.getRandomInt(0, randomWords.length)];
 
         res.json({
-            word: finalRandomWord.word,
-            def: _getWordDefinition(finalRandomWord.defs[0]),
-            t: new Date().toUTCString()
+            name: finalRandomWord.word,
+            definitions: finalRandomWord.defs.map((def) => _getWordDefinition(def)),
+            publishDateUTC: new Date()
         });
     } catch (err) {
         console.error(err);
@@ -112,7 +113,8 @@ async function getMemeWord (req, res) {
                 tries = appValues.memeWords.maxApiRepeat;
                 res.json({
                     name: utils.escapeHtml(striptags(resultMatch[1])),
-                    def: utils.escapeHtml(striptags(resultMatch[2]))
+                    definitions: [utils.escapeHtml(striptags(resultMatch[2]))],
+                    publishDateUTC: new Date()
                 });
             }
         }
