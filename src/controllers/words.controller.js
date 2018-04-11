@@ -38,11 +38,12 @@ async function getDailyWord (req, res) {
         }
 
         let words = await DailyWord.find(query).exec();
+        let wordsCount = req.query.count || 1;
         if (words && Array.isArray(words)) {
             words.sort((wordX, wordY) => {
                 return wordY.publishDateUTC - wordX.publishDateUTC;
             });
-            return res.json(words[0]);
+            return res.json(words.slice(0, wordsCount));
         } else {
             return res.status(404).send();
         }
@@ -79,11 +80,11 @@ async function getRandomWord (req, res) {
         });
         let finalRandomWord = randomWords[utils.getRandomInt(0, randomWords.length)];
 
-        res.json({
+        res.json([{
             name: finalRandomWord.word,
             definitions: finalRandomWord.defs.map((def) => _getWordDefinition(def)),
             publishDateUTC: new Date()
-        });
+        }]);
     } catch (err) {
         console.error(err);
         res.status(500).send();
@@ -111,11 +112,11 @@ async function getMemeWord (req, res) {
             console.log(resultMatch);
             if (resultMatch) {
                 tries = appValues.memeWords.maxApiRepeat;
-                res.json({
+                res.json([{
                     name: utils.escapeHtml(striptags(resultMatch[1])),
                     definitions: [utils.escapeHtml(striptags(resultMatch[2]))],
                     publishDateUTC: new Date()
-                });
+                }]);
             }
         }
     } catch (err) {
