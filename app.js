@@ -7,6 +7,9 @@ const logger = require("morgan");
 const bodyParser = require("body-parser");
 const request = require("request");
 
+// Load .env file for local development
+require('dotenv').config();
+
 const mongoDb = require("./src/database/mongodb.connection");
 const apiTestingRoutes = require("./src/routing/app-testing.routes");
 const wordsRoutes = require("./src/routing/words.routes");

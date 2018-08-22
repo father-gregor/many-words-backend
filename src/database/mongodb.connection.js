@@ -18,7 +18,8 @@ module.exports = {
                     "keepAlive" : 300000,
                     "connectTimeoutMS" : 30000
                 }
-            }
+            },
+            "useNewUrlParser": true
         }
 
         mongoose.Promise = Promise;

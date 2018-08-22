@@ -38,6 +38,6 @@ function onError(error) {
 function onListening() {
     let addr = server.address();
     let bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-    debug("Express server listening on " + bind);
-    console.log("Express server listening on " + bind);
+    debug("\n\nExpress server listening on " + bind);
+    console.log("\n\nExpress server listening on " + bind);
 }

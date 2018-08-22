@@ -13,8 +13,6 @@ async function fillDatabase (req, res) {
         await DailyWord.create(predefinedWords);
     
         let dailyWords = await DailyWord.find().exec();
-        console.log(dailyWords);
-    
         res.json(dailyWords);
     } catch (err) {
         console.error(err);
