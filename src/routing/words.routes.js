@@ -1,6 +1,6 @@
 "use strict";
 
-const router = require('express').Router();
+const router = require("express").Router();
 const wordsController = require("../controllers/words.controller");
 const databaseController = require("../controllers/database.controller");
 

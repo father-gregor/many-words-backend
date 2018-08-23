@@ -82,7 +82,7 @@ async function getRandomWord (req, res) {
 
         res.json([{
             name: finalRandomWord.word,
-            definitions: finalRandomWord.defs.map((def) => _getWordDefinition(def)),
+            definitions: finalRandomWord.defs.map((def) => utils.cleanWordDefinition(def)),
             publishDateUTC: new Date()
         }]);
     } catch (err) {
@@ -123,10 +123,6 @@ async function getMemeWord (req, res) {
         console.error(err);
         res.status(500).send();
     }
-}
-
-function _getWordDefinition (def) {
-    return def && def.replace(/^.+?\s+?/, "");
 }
 
 module.exports = {

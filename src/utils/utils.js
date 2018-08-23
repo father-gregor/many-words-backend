@@ -11,6 +11,10 @@ function timer (start) {
     return Math.round((end[0]*1000) + (end[1]/1000000));
 }
 
+function cleanWordDefinition (def) {
+    return def && def.replace(/^.+?\s+?/, "");
+}
+
 function escapeHtml (text) {
     const map = {
       "&amp;": "&",
@@ -27,5 +31,6 @@ function escapeHtml (text) {
 module.exports = {
     getRandomInt,
     timer,
+    cleanWordDefinition,
     escapeHtml
 }

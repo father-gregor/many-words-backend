@@ -46,6 +46,6 @@ function transformJson (doc, ret) {
     delete ret.__v;
 }
 
-DailyWordSchema.set('toJSON', {transform: transformJson});
+DailyWordSchema.set("toJSON", {transform: transformJson});
 
 module.exports = DailyWordSchema;
