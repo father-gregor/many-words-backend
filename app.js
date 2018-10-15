@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const request = require("request");
 
 // Load .env file for local development
-require('dotenv').config();
+require("dotenv").config();
 
 const mongoDb = require("./src/database/mongodb.connection");
 const apiTestingRoutes = require("./src/routing/app-testing.routes");
@@ -27,7 +27,7 @@ app.use("/api/testing", apiTestingRoutes);
 app.use("/api/words", wordsRoutes);
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.use(function (req, res, next) {
@@ -37,7 +37,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500).send(req.app.get('env') === 'development' ? err : {});
+    res.status(err.status || 500).send(req.app.get("env") === "development" ? err : {});
 });
 
 module.exports = app;
