@@ -37,13 +37,9 @@ async function getDailyWord (req, res) {
             return res.status(400).send();
         }
 
-        let words = await DailyWord.find(query).exec();
-        let wordsCount = req.query.count || 1;
+        let words = await DailyWord.find(query).sort({"publishDateUTC": -1}).limit(parseInt(req.query.count, 10) || 1).exec();
         if (words && Array.isArray(words)) {
-            words.sort((wordX, wordY) => {
-                return wordY.publishDateUTC - wordX.publishDateUTC;
-            });
-            return res.json(words.slice(0, wordsCount));
+            return res.json(words);
         } else {
             return res.status(404).send();
         }
@@ -109,7 +105,6 @@ async function getMemeWord (req, res) {
             });
 
             let resultMatch = memeWordRegExp.exec(html);
-            console.log(resultMatch);
             if (resultMatch) {
                 tries = appValues.memeWords.maxApiRepeat;
                 res.json([{

@@ -100,8 +100,6 @@ async function _getRawWordsList () {
             }
         });
 
-        console.log(rawWords);
-
         if (rawWords.length <= 0) {
            throw null;
         }
