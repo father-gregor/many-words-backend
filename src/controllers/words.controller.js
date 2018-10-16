@@ -1,13 +1,19 @@
 "use strict";
 
 const rpn = require("request-promise-native");
-const striptags = require("striptags");
+const cheerio = require("cheerio");
+const natural = require("natural");
+
 const Models = require("../database/mongoose.models");
 const appValues = require("../../config/app.values.json");
 const utils = require("../utils/utils");
 const ExternalApi = require("../../config/external-api.values.json");
+const profanitiesValues = require("../../config/profanities.json");
 
 const DailyWord = Models.DailyWord;
+
+const ProfanitiesTrie = new natural.Trie();
+ProfanitiesTrie.addStrings(profanitiesValues);
 
 /**
  * Function to get daily word. Word is returned for date that user has right now - ignoring actual timezone
@@ -89,9 +95,6 @@ async function getRandomWord (req, res) {
 
 async function getMemeWord (req, res) {
     try {
-        //Zero group - complete result, first group - word, second group - definition
-        let memeWordRegExp = /<a class="word".+?>(.+?)<\/a>.+<div class="meaning".*?>(.+?)<\/div>/mi;
-
         for (let tries = 0; tries < appValues.memeWords.maxApiRepeat; tries++) {
             let query = {};
             for (let param of ExternalApi.memeWords.queryParams) {
@@ -104,12 +107,30 @@ async function getMemeWord (req, res) {
                 qs: query
             });
 
-            let resultMatch = memeWordRegExp.exec(html);
-            if (resultMatch) {
-                tries = appValues.memeWords.maxApiRepeat;
-                res.json([{
-                    name: utils.escapeHtml(striptags(resultMatch[1])),
-                    definitions: [utils.escapeHtml(striptags(resultMatch[2]))],
+            let word = {definitions: []};
+            let $ = cheerio.load(html);
+
+            $("a.word").each(function () {
+                let name = $(this).text().trim();
+                if (name && !ProfanitiesTrie.contains(name)) {
+                    word.name = name;
+                    return false;
+                }
+            });
+
+            $("div.meaning").each(function () {
+                let definition = $(this).text().trim();
+                if (definition && !ProfanitiesTrie.contains(definition)) {
+                    word.definitions.push(definition);
+                    if (word.definitions.length > 3) {
+                        return false;
+                    }
+                }
+            });
+
+            if (word.name && word.definitions.length > 0) {
+                return res.json([{
+                    ...word,
                     publishDateUTC: new Date()
                 }]);
             }

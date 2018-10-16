@@ -87,8 +87,6 @@ async function _getRawWordsList () {
             }
         });
 
-        console.log("FINISHED REQUEST");
-
         if (!$) {
             throw null;
         }
