@@ -97,7 +97,6 @@ async function getRandomWord (req, res) {
                 tries = appValues.memeWords.maxApiRepeat;
             }
         }
-
         return res.json(result);
     } catch (err) {
         console.error(err);
