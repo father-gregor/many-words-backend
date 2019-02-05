@@ -6,9 +6,10 @@
         "wildcard": {
             "min": 4,
             "max": 10
-        }
+        },
+        "maxApiRepeat": 10
     },
     "memeWords": {
-        "maxApiRepeat": 3
+        "maxApiRepeat": 10
     }
 }

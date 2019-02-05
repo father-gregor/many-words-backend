@@ -11,7 +11,7 @@ async function fillDatabase (req, res) {
             predefinedWords[i].publishDateUTC = _createUTCDate(predefinedWords[i].publishDateUTC);
         }
         await DailyWord.create(predefinedWords);
-    
+
         let dailyWords = await DailyWord.find().exec();
         res.json(dailyWords);
     } catch (err) {
@@ -22,13 +22,13 @@ async function fillDatabase (req, res) {
 
 /**
  * Convert string to UTC date. String date can be only in format of "dd.mm.YYYY"
- * @param {*} stringDate 
+ * @param {*} stringDate
  */
 function _createUTCDate (stringDate) {
     let result = stringDate.split(".");
-    let Year = parseInt(result[2]);
-    let Month = parseInt(result[1]) - 1;
-    let DayOfMonth = parseInt(result[0]);
+    let Year = parseInt(result[2], 10);
+    let Month = parseInt(result[1], 10) - 1;
+    let DayOfMonth = parseInt(result[0], 10);
     return new Date(Date.UTC(Year, Month, DayOfMonth));
 }
 

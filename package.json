@@ -37,6 +37,9 @@
     "serve-favicon": "^2.4.5"
   },
   "devDependencies": {
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "node-sass": "^4.9.4",
     "protractor": "^5.4.1",
     "ts-node": "^5.0.1",

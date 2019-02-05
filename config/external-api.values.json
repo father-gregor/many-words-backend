@@ -4,11 +4,9 @@
     },
     "memeWords": {
         "url": "https://www.urbandictionary.com/random.php",
-        "queryParams": [
-            {
-                "name": "page",
-                "value": 10001
-            }
-        ]
+        "queryParams": {
+            "name": "page",
+            "value": 10001
+        }
     }
 }

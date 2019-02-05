@@ -1,26 +1,26 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const schemas = require("./mongoose.models");
+// const schemas = require("./mongoose.models");
 
 module.exports = {
-    connectToDb: function () {
+    connectToDb: () => {
         let mongoURI = process.env.MONGODB_URI;
         let connectionOptions = {
-            "server" : {
-                "socketOptions" : {
-                    "keepAlive" : 300000,
-                    "connectTimeoutMS" : 30000
+            server: {
+                socketOptions: {
+                    keepAlive: 300000,
+                    connectTimeoutMS: 30000
                 }
             },
-            "replset" : {
-                "socketOptions" : {
-                    "keepAlive" : 300000,
-                    "connectTimeoutMS" : 30000
+            replset: {
+                socketOptions: {
+                    keepAlive: 300000,
+                    connectTimeoutMS: 30000
                 }
             },
-            "useNewUrlParser": true
-        }
+            useNewUrlParser: true
+        };
 
         mongoose.Promise = Promise;
         mongoose.connect(mongoURI, connectionOptions);

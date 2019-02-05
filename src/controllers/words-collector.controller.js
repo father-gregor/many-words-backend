@@ -27,28 +27,28 @@ async function collect ({wordsCount}) {
                 },
                 json: true
             });
-    
+
             if (!suitableWords) {
-                return;
+                return null;
             }
-    
+
             for (let i = 0; i < suitableWords.length; i++) {
-                let partOfSpeech = suitableWords[i].tags && suitableWords[i].tags.find((tag) => AvailablePartOfSpeech.includes(tag));
+                let partOfSpeech = suitableWords[i].tags && suitableWords[i].tags.find(tag => AvailablePartOfSpeech.includes(tag));
                 if (suitableWords[i].defs && suitableWords[i].defs.length > 0 && partOfSpeech) {
                     extractedWords.push({
                         name: suitableWords[i].word,
-                        definitions: suitableWords[i].defs.map((def) => utils.cleanWordDefinition(def)),
-                        partOfSpeech: partOfSpeech,
-                        language: "en"
+                        definitions: suitableWords[i].defs.map(def => utils.cleanWordDefinition(def)),
+                        language: "en",
+                        partOfSpeech
                     });
                     i = suitableWords.length;
                 }
-    
+
                 if (suitableWords.length >= maxCount) {
                     i = suitableWords.length;
                 }
             }
-    
+
             await _wait((Math.random() * 100 + 1));
         }
 
@@ -69,29 +69,27 @@ async function _getRawWordsList () {
                 blist: ""
             },
             form: {
-                "oType": "blist",
-                "lst_howmany": "10",
-                "lst_fLetter": "", 
-                "wSizeType": "",
-                "lst_wLen": "", 
-                "lst_wLenOper": "Equals",
-                "par_numPara": "3",
-                "par_numSent": "5",
-                "par_numWordsSent": "14",
-                "tbl_numCols": "3",
-                "tbl_numRows": "3",
-                "tbl_tblHead": "0"
+                oType: "blist",
+                lst_howmany: "10",
+                lst_fLetter: "",
+                wSizeType: "",
+                lst_wLen: "",
+                lst_wLenOper: "Equals",
+                par_numPara: "3",
+                par_numSent: "5",
+                par_numWordsSent: "14",
+                tbl_numCols: "3",
+                tbl_numRows: "3",
+                tbl_tblHead: "0"
             },
-            transform: function (body) {
-                return body ? cheerio.load(body) : undefined;
-            }
+            transform: body => body && cheerio.load(body)
         });
 
         if (!$) {
-            throw null;
+            throw new Error();
         }
 
-        $("#results").find("li").each(function () {
+        $("#results").find("li").each(() => {
             let word = $(this).text().trim();
             if (word.length > 3) {
                 rawWords.push(word);
@@ -99,22 +97,21 @@ async function _getRawWordsList () {
         });
 
         if (rawWords.length <= 0) {
-           throw null;
+            throw new Error();
         }
 
         return rawWords;
-
     } catch (err) {
         throw new Error("Error: Failed to get raw words html\n");
     }
 }
 
 function _wait (ms) {
-    return new Promise(resolve=>{
-        setTimeout(resolve, ms)
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
     });
 }
 
 module.exports = {
     collect
-}
+};
