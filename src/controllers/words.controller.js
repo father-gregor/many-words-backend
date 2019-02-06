@@ -18,7 +18,8 @@ ProfanitiesTrie.addStrings(profanitiesValues);
 /**
  * Function to get daily word. Word is returned for date that user has right now - ignoring actual timezone
  * @param {*} req
- * @param {String} req.query.date - date of word to return.
+ * @param {String} req.query.date - date of word to return
+ * @param {String} req.query.count - count of words to return
  * @param {*} res
  */
 async function getDailyWord (req, res) {
@@ -58,7 +59,7 @@ async function getDailyWord (req, res) {
  * Query params:
  *      sp - "spelled like" words. To simulate randomness we provide random number (in some range) of wildcard symbols "?"
  * @param {*} req
- * @param {String} req.query.count
+ * @param {String} req.query.count - count of words to return
  * @param {*} res
  */
 async function getRandomWord (req, res) {
@@ -66,10 +67,11 @@ async function getRandomWord (req, res) {
         let wildcard = "";
         let result = [];
         const count = parseInt(req.query.count, 10);
+        const maxTries = count + appValues.randomWords.maxApiRepeat;
         let min = appValues.randomWords.wildcard.min;
         let max = appValues.randomWords.wildcard.max;
 
-        for (let tries = 0; tries < appValues.randomWords.maxApiRepeat; tries++) {
+        for (let tries = 0; tries < maxTries; tries++) {
             let wildcardLength = utils.getRandomInt(min, max);
             // TODO Optimize process to append two-three symbols prefix for more randomized result
             for (let i = 0; i < wildcardLength; i++) {
@@ -94,7 +96,7 @@ async function getRandomWord (req, res) {
             }
 
             if (result.length >= count) {
-                tries = appValues.memeWords.maxApiRepeat;
+                tries = maxTries;
             }
         }
         return res.json(result);
@@ -107,15 +109,16 @@ async function getRandomWord (req, res) {
 /**
  * Query params:
  * @param {*} req
- * @param {String} req.query.count
+ * @param {String} req.query.count - count of words to return
  * @param {*} res
  */
 async function getMemeWord (req, res) {
     try {
         let result = [];
         const count = parseInt(req.query.count, 10);
+        const maxTries = count + appValues.memeWords.maxApiRepeat;
 
-        for (let tries = 0; tries < appValues.memeWords.maxApiRepeat; tries++) {
+        for (let tries = 0; tries < maxTries; tries++) {
             let query = {};
             let paramName = ExternalApi.memeWords.queryParams.name;
             let paramValue = ExternalApi.memeWords.queryParams.value;
@@ -160,7 +163,7 @@ async function getMemeWord (req, res) {
             }
 
             if (result.length >= count) {
-                tries = appValues.memeWords.maxApiRepeat;
+                tries = maxTries;
             }
         }
         return res.json(result);
