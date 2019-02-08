@@ -26,7 +26,7 @@ async function getDailyWord (req, res) {
     try {
         let query = {};
 
-        if (req.query.date && Math.isNaN(Date.parse(req.query.date)) === false) {
+        if (req.query.date && isNaN(Date.parse(req.query.date)) === false) {
             let reqDate = new Date(req.query.date);
             let formatDate = new Date();
             formatDate.setUTCMilliseconds(0);
@@ -87,7 +87,7 @@ async function getRandomWord (req, res) {
             });
             let finalRandomWord = randomWords[utils.getRandomInt(0, randomWords.length)];
 
-            if (finalRandomWord && finalRandomWord.word) {
+            if (finalRandomWord && finalRandomWord.word && finalRandomWord.defs) {
                 result.push({
                     name: finalRandomWord.word,
                     definitions: finalRandomWord.defs.map(def => utils.cleanWordDefinition(def)),
