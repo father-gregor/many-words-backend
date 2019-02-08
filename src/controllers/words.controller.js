@@ -26,7 +26,7 @@ async function getDailyWord (req, res) {
     try {
         let query = {};
 
-        if (req.query.date && isNaN(Date.parse(req.query.date)) === false) {
+        if (req.query.date && Number.isNaN(Date.parse(req.query.date)) === false) {
             let reqDate = new Date(req.query.date);
             let formatDate = new Date();
             formatDate.setUTCMilliseconds(0);
