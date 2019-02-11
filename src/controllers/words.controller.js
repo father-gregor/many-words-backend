@@ -133,8 +133,8 @@ async function getMemeWord (req, res) {
             let word = {definitions: []};
             let $ = cheerio.load(html);
 
-            $("a.word").each(() => {
-                let name = $(this).text().trim();
+            $("a.word").each((i, elem) => {
+                let name = $(elem).text().trim();
                 if (name && !ProfanitiesTrie.contains(name)) {
                     word.name = name;
                     return false;
@@ -143,8 +143,8 @@ async function getMemeWord (req, res) {
                 return true;
             });
 
-            $("div.meaning").each(() => {
-                let definition = $(this).text().trim();
+            $("div.meaning").each((i, elem) => {
+                let definition = $(elem).text().trim();
                 if (definition && !ProfanitiesTrie.contains(definition)) {
                     word.definitions.push(definition);
                     if (word.definitions.length > 3) {
