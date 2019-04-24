@@ -7,6 +7,7 @@ const natural = require("natural");
 const Models = require("../database/mongoose.models");
 const appValues = require("../../config/app.values.json");
 const utils = require("../utils/utils");
+const Logger = require("../services/logger.service");
 const ExternalApi = require("../../config/external-api.values.json");
 const profanitiesValues = require("../../config/profanities.json");
 
@@ -50,7 +51,7 @@ async function getDailyWord (req, res) {
 
         return res.status(404).send();
     } catch (err) {
-        console.error(err);
+        Logger.error(err.message, err);
         return res.status(500).send();
     }
 }
@@ -101,7 +102,7 @@ async function getRandomWord (req, res) {
         }
         return res.json(result);
     } catch (err) {
-        console.error(err);
+        Logger.error(err.message, err);
         return res.status(500).send();
     }
 }
@@ -168,7 +169,7 @@ async function getMemeWord (req, res) {
         }
         return res.json(result);
     } catch (err) {
-        console.error(err);
+        Logger.error(err.message, err);
         return res.status(500).send();
     }
 }

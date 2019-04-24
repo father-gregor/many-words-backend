@@ -1,13 +1,10 @@
 "use strict";
 
-const router = require("express").Router();
+const app = require("express");
 const wordsController = require("../controllers/words.controller");
 const databaseController = require("../controllers/database.controller");
 
-router.route("/daily").get(wordsController.getDailyWord);
-router.route("/random").get(wordsController.getRandomWord);
-router.route("/meme").get(wordsController.getMemeWord);
-
-router.route("/fill-database").get(databaseController.fillDailyWordsDatabase);
-
-module.exports = router;
+app.route("/api/words/daily").get(wordsController.getDailyWord);
+app.route("/api/words/random").get(wordsController.getRandomWord);
+app.route("/api/words/meme").get(wordsController.getMemeWord);
+app.route("/api/words/fill-database").get(databaseController.fillDailyWordsDatabase);
