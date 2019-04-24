@@ -1,7 +1,7 @@
 "use strict";
 
 const Models = require("../database/mongoose.models");
-const wordsCollector = require("./words-collector.controller");
+const WordsCollector = require("../services/words-collector.service");
 
 const DailyWord = Models.DailyWord;
 
@@ -13,7 +13,7 @@ const DailyWord = Models.DailyWord;
 async function fillDailyWordsDatabase (req, res) {
     let collectedWords;
     try {
-        collectedWords = await wordsCollector.collect({wordsCount: 30});
+        collectedWords = await WordsCollector.collect({wordsCount: 30});
         if (!collectedWords) {
             throw new Error("Error: No words collected");
         }

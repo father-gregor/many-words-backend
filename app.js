@@ -21,8 +21,28 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: "false"}));
 app.use(express.static(path.join(__dirname, "dist")));
 
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+app.disable("x-powered-by");
+
+app.use((req, res, next) => {
+    res.set("Cache-Control", "max-age=2592000");
+    next();
+});
+
+app.use("/api", (req, res, next) => {
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+    next();
+});
+
+// API ROUTES
+require("./src/routing/words.routes")(app);
+
+app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api/")) {
+        return next();
+    }
+    return res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.use((req, res, next) => {

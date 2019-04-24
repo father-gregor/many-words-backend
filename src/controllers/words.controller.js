@@ -6,7 +6,7 @@ const natural = require("natural");
 
 const Models = require("../database/mongoose.models");
 const appValues = require("../../config/app.values.json");
-const utils = require("../utils/utils");
+const Utils = require("../services/utils.service");
 const Logger = require("../services/logger.service");
 const ExternalApi = require("../../config/external-api.values.json");
 const profanitiesValues = require("../../config/profanities.json");
@@ -72,8 +72,9 @@ async function getRandomWord (req, res) {
         let min = appValues.randomWords.wildcard.min;
         let max = appValues.randomWords.wildcard.max;
 
+        const start = Utils.timer();
         for (let tries = 0; tries < maxTries; tries++) {
-            let wildcardLength = utils.getRandomInt(min, max);
+            let wildcardLength = Utils.getRandomInt(min, max);
             // TODO Optimize process to append two-three symbols prefix for more randomized result
             for (let i = 0; i < wildcardLength; i++) {
                 wildcard = `${wildcard}?`;
@@ -86,12 +87,12 @@ async function getRandomWord (req, res) {
                 },
                 json: true
             });
-            let finalRandomWord = randomWords[utils.getRandomInt(0, randomWords.length)];
+            let finalRandomWord = randomWords[Utils.getRandomInt(0, randomWords.length)];
 
             if (finalRandomWord && finalRandomWord.word && finalRandomWord.defs) {
                 result.push({
                     name: finalRandomWord.word,
-                    definitions: finalRandomWord.defs.map(def => utils.cleanWordDefinition(def)),
+                    definitions: finalRandomWord.defs.map(def => Utils.cleanWordDefinition(def)),
                     publishDateUTC: new Date()
                 });
             }
@@ -100,6 +101,7 @@ async function getRandomWord (req, res) {
                 tries = maxTries;
             }
         }
+        console.log("TIME", Utils.timer(start));
         return res.json(result);
     } catch (err) {
         Logger.error(err.message, err);
@@ -123,7 +125,7 @@ async function getMemeWord (req, res) {
             let query = {};
             let paramName = ExternalApi.memeWords.queryParams.name;
             let paramValue = ExternalApi.memeWords.queryParams.value;
-            query[paramName] = utils.getRandomInt(paramValue, paramValue * 10);
+            query[paramName] = Utils.getRandomInt(paramValue, paramValue * 10);
 
             // If we define "page" value bigger than 1000 (that value maybe going to change or increase in future) every request would give us random word
             let html = await rpn.get({

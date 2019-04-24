@@ -2,7 +2,7 @@
 
 const rpn = require("request-promise-native");
 const cheerio = require("cheerio");
-const utils = require("../utils/utils");
+const Utils = require("../services/utils.service");
 const AvailablePartOfSpeech = require("../../config/app.values.json").dailyWords.partOfSpeech;
 
 const defaultCount = 30;
@@ -12,7 +12,7 @@ const mainAPIUrl = "https://api.datamuse.com/words";
 async function collect ({wordsCount}) {
     let maxCount = wordsCount || defaultCount;
     let extractedWords = [];
-    let start = utils.timer();
+    let start = Utils.timer();
     while (extractedWords.length < maxCount) {
         let rawWords = await _getRawWordsList();
         if (!rawWords) {
@@ -37,7 +37,7 @@ async function collect ({wordsCount}) {
                 if (suitableWords[i].defs && suitableWords[i].defs.length > 0 && partOfSpeech) {
                     extractedWords.push({
                         name: suitableWords[i].word,
-                        definitions: suitableWords[i].defs.map(def => utils.cleanWordDefinition(def)),
+                        definitions: suitableWords[i].defs.map(def => Utils.cleanWordDefinition(def)),
                         language: "en",
                         partOfSpeech
                     });
@@ -52,7 +52,7 @@ async function collect ({wordsCount}) {
             await _wait((Math.random() * 100 + 1));
         }
 
-        if (utils.timer(start) > 3000 * maxCount) {
+        if (Utils.timer(start) > 3000 * maxCount) {
             throw new Error("Error: Exceed max allowed time for words collecting. Abort operation");
         }
     }

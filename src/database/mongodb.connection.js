@@ -1,6 +1,8 @@
 "use strict";
 
 const mongoose = require("mongoose");
+
+const Logger = require("../services/logger.service");
 // const schemas = require("./mongoose.models");
 
 module.exports = {
@@ -26,6 +28,8 @@ module.exports = {
         mongoose.connect(mongoURI, connectionOptions);
         let db = mongoose.connection;
 
-        db.on("error", console.error.bind(console, "connection error:"));
+        db.on("error", (error) => {
+            Logger.error("MongoDB Connection Error", error);
+        });
     }
 };
