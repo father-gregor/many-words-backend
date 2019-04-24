@@ -4,7 +4,7 @@
   "description": "Backend server for Nativescript app 'Many Words'",
   "license": "MIT",
   "engines": {
-    "node": "8.6.0"
+    "node": "10.15.1"
   },
   "repository": {
     "type": "git",
@@ -24,27 +24,27 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.18.3",
-    "cheerio": "^1.0.0-rc.2",
-    "debug": "^3.2.6",
-    "dotenv": "^6.1.0",
+    "cheerio": "^1.0.0-rc.3",
+    "debug": "^4.1.1",
+    "dotenv": "^7.0.0",
     "express": "^4.16.4",
-    "mongoose": "^5.3.4",
+    "mongoose": "^5.5.3",
     "morgan": "^1.9.1",
-    "natural": "0.6.1",
-    "nodemailer": "^4.6.8",
+    "natural": "^0.6.3",
+    "nodemailer": "^6.1.1",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.5",
-    "serve-favicon": "^2.4.5"
+    "request-promise-native": "^1.0.7",
+    "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
-    "eslint": "^5.13.0",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "node-sass": "^4.9.4",
-    "protractor": "^5.4.1",
-    "ts-node": "^5.0.1",
-    "tslint": "^5.11.0",
-    "typescript": "~2.7.0"
+    "eslint-plugin-import": "^2.17.2",
+    "node-sass": "^4.11.0",
+    "protractor": "^5.4.2",
+    "ts-node": "^8.1.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
   },
   "keywords": [
     "node",
