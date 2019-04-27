@@ -75,7 +75,7 @@ async function getRandomWord (req, res) {
             let randomWordPromises = [];
             let resultFilled = false;
             for (let tries = 0; tries < count; tries++) {
-                this.randomWordPromises.push(this.WordsFetcher.requestRandomWord);
+                randomWordPromises.push(WordsFetcher.requestRandomWord);
             }
             let randomWords = await Promise.all(randomWordPromises);
 
