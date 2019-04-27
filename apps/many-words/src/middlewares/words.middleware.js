@@ -11,6 +11,15 @@ function validateQueryParams (req, res, next) {
     return next();
 }
 
+function validateMemeWordsParams (req, res, next) {
+    if (req.query.os && req.query.os.toLowerCase().includes("ios")) {
+        req.query.checkProfanities = true;
+    }
+
+    return next();
+}
+
 module.exports = {
-    validateQueryParams
+    validateQueryParams,
+    validateMemeWordsParams
 };

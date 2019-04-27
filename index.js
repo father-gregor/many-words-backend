@@ -5,7 +5,6 @@ const path = require("path");
 // const favicon = require("serve-favicon");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
-// const request = require("request");
 
 // Load .env file for local development
 require("dotenv").config();

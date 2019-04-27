@@ -1,19 +1,15 @@
 "use strict";
 
 const cheerio = require("cheerio");
-const natural = require("natural");
 
 const Models = require("../../models");
 const appValues = require("../../config/app.values.json");
 const Utils = require("../services/utils.service");
 const Logger = require("../../../../common/services/logger.service");
-const WordsFetcher = require("../services/words-fetcher.service");
-const profanitiesValues = require("../../config/profanities.json");
+const WordUtils = require("../services/word-utils.service");
+const WordFetcher = require("../services/word-fetcher.service");
 
 const DailyWord = Models.DailyWord;
-
-const ProfanitiesTrie = new natural.Trie();
-ProfanitiesTrie.addStrings(profanitiesValues);
 
 /**
  * Function to get daily word. Word is returned for date that user has right now - ignoring actual timezone
@@ -65,14 +61,14 @@ async function getDailyWord (req, res) {
 async function getRandomWord (req, res) {
     try {
         let result = [];
-        const count = parseInt(req.query.count, 10);
+        const count = req.query.count;
         let maxTries = appValues.randomWords.maxApiRepeat;
         let resultFilled = false;
 
         while (maxTries > 0) {
             let randomWordPromises = [];
             for (let i = 0; i < count; i++) {
-                randomWordPromises.push(WordsFetcher.requestRandomWord());
+                randomWordPromises.push(WordFetcher.requestRandomWord());
             }
 
             let randomWords = await Promise.all(randomWordPromises);
@@ -113,13 +109,14 @@ async function getMemeWord (req, res) {
     try {
         let result = [];
         const count = req.query.count;
+        const checkProfanities = req.query.checkProfanities;
         let maxTries = appValues.memeWords.maxApiRepeat;
         let resultFilled = false;
 
         while (maxTries > 0) {
             let memeWordPromises = [];
             for (let i = 0; i < count; i++) {
-                memeWordPromises.push(WordsFetcher.requestMemeWord());
+                memeWordPromises.push(WordFetcher.requestMemeWord());
             }
 
             let memeWords = await Promise.all(memeWordPromises);
@@ -134,9 +131,12 @@ async function getMemeWord (req, res) {
 
                 $("a.word").each((i, elem) => {
                     let name = $(elem).text().trim();
-                    if (name && !ProfanitiesTrie.contains(name)) {
-                        word.name = name;
-                        return false;
+                    if (name) {
+                        const allowed = checkProfanities ? !WordUtils.checkForProfanities(name) : true;
+                        if (allowed) {
+                            word.name = name;
+                            return false;
+                        }
                     }
 
                     return true;
@@ -144,11 +144,14 @@ async function getMemeWord (req, res) {
 
                 $("div.meaning").each((i, elem) => {
                     let definition = $(elem).text().trim();
-                    if (definition && !ProfanitiesTrie.contains(definition)) {
-                        word.definitions.push(definition);
-                        if (word.definitions.length > 3) {
-                            return false;
+                    if (definition) {
+                        const allowed = checkProfanities ? !WordUtils.checkForProfanities(definition) : true;
+                        if (allowed) {
+                            word.definitions.push(definition);
                         }
+                    }
+                    if (word.definitions.length > 3) {
+                        return false;
                     }
 
                     return true;

@@ -2,7 +2,7 @@
 
 const Models = require("../../models");
 const Logger = require("../../../../common/services/logger.service");
-const WordsCollector = require("../services/words-collector.service");
+const WordCollector = require("../services/word-collector.service");
 
 const DailyWord = Models.DailyWord;
 
@@ -14,7 +14,7 @@ const DailyWord = Models.DailyWord;
 async function fillDailyWordsDatabase (req, res) {
     let collectedWords;
     try {
-        collectedWords = await WordsCollector.collect({wordsCount: 30});
+        collectedWords = await WordCollector.collect({wordsCount: 30});
         if (!collectedWords) {
             throw new Error("Error: No words collected");
         }
