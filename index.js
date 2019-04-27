@@ -10,7 +10,7 @@ const bodyParser = require("body-parser");
 // Load .env file for local development
 require("dotenv").config();
 
-const mongoDb = require("./src/database/mongodb.connection");
+const mongoDb = require("./database/mongodb.connection");
 
 mongoDb.connectToDb();
 
@@ -35,8 +35,8 @@ app.use("/api", (req, res, next) => {
     next();
 });
 
-// API ROUTES
-require("./src/routing/words.routes")(app);
+// Init apps
+require("./apps/many-words/app")(app);
 
 app.get("*", (req, res, next) => {
     if (req.path.startsWith("/api/")) {
@@ -51,8 +51,6 @@ app.use((req, res, next) => {
     next(err);
 });
 
-app.use((err, req, res) => {
-    return res.status(err.status || 500).send(req.app.get("env") === "development" ? err : {});
-});
+app.use((err, req, res) => res.status(err.status || 500).send(req.app.get("env") === "development" ? err : {}));
 
 module.exports = app;

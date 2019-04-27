@@ -3,7 +3,7 @@
 const debug = require("debug")("many-words-backend");
 const http = require("http");
 
-const app = require("../app");
+const app = require("../index");
 
 const port = process.env.PORT || "3000";
 app.set("port", port);
@@ -23,11 +23,11 @@ function onError (error) {
 
     switch (error.code) {
         case "EACCES":
-            console.error(`${bind} requires elevated privileges`);
+            console.error(`${bind} requires elevated privileges`); // eslint-disable-line
             process.exit(1);
             break;
         case "EADDRINUSE":
-            console.error(`${bind} is already in use`);
+            console.error(`${bind} is already in use`); // eslint-disable-line
             process.exit(1);
             break;
         default:
@@ -39,5 +39,5 @@ function onListening () {
     let addr = server.address();
     let bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
     debug(`\n\nExpress server listening on ${bind}`);
-    console.log(`\n\nExpress server listening on ${bind}`);
+    console.log(`\n\nExpress server started and listening on ${bind}`); // eslint-disable-line
 }

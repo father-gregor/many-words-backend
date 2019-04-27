@@ -1,12 +1,16 @@
 "use strict";
 
-const Models = require("../database/mongoose.models");
+const Models = require("../models");
 
 const Log = Models.Log;
 
 async function log (type, message, details) {
     if (details instanceof Error) {
         details = {...details, message: details.message, stack: details.stack};
+    }
+
+    if (process.env.NODE_ENV === "development") {
+        console.log({type, message, details});  // eslint-disable-line
     }
 
     return Log.create({

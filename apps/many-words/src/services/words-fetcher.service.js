@@ -28,6 +28,20 @@ async function requestRandomWord () {
     return randomWords[Utils.getRandomInt(0, randomWords.length)];
 }
 
+async function requestMemeWord () {
+    let query = {};
+    let paramName = ExternalApi.memeWords.queryParams.name;
+    let paramValue = ExternalApi.memeWords.queryParams.value;
+    query[paramName] = Utils.getRandomInt(paramValue, paramValue * 10);
+
+    // If we define "page" value bigger than 1000 (that value maybe going to change or increase in future) every request would give us random word
+    return rpn.get({
+        url: ExternalApi.memeWords.url,
+        qs: query
+    });
+}
+
 module.exports = {
-    requestRandomWord
+    requestRandomWord,
+    requestMemeWord
 };

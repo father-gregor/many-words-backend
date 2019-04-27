@@ -2,7 +2,7 @@
 
 const mongoose = require("mongoose");
 
-const Logger = require("../services/logger.service");
+const Logger = require("../common/services/logger.service");
 // const schemas = require("./mongoose.models");
 
 module.exports = {

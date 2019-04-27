@@ -1,6 +1,7 @@
 "use strict";
 
-const Models = require("../database/mongoose.models");
+const Models = require("../../models");
+const Logger = require("../../../../common/services/logger.service");
 const WordsCollector = require("../services/words-collector.service");
 
 const DailyWord = Models.DailyWord;
@@ -18,7 +19,7 @@ async function fillDailyWordsDatabase (req, res) {
             throw new Error("Error: No words collected");
         }
     } catch (err) {
-        console.log(err);
+        Logger.error(err.message, err);
         return res.status(500).send("Error: Failed to collect words");
     }
 
@@ -38,7 +39,7 @@ async function fillDailyWordsDatabase (req, res) {
 
         return res.json(docs);
     } catch (err) {
-        console.log(err);
+        Logger.error(err.message, err);
         return res.status(500).send();
     }
 }

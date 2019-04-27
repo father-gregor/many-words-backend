@@ -1,15 +1,13 @@
 "use strict";
 
-const rpn = require("request-promise-native");
 const cheerio = require("cheerio");
 const natural = require("natural");
 
-const Models = require("../database/mongoose.models");
+const Models = require("../../models");
 const appValues = require("../../config/app.values.json");
 const Utils = require("../services/utils.service");
-const Logger = require("../services/logger.service");
+const Logger = require("../../../../common/services/logger.service");
 const WordsFetcher = require("../services/words-fetcher.service");
-const ExternalApi = require("../../config/external-api.values.json");
 const profanitiesValues = require("../../config/profanities.json");
 
 const DailyWord = Models.DailyWord;
@@ -69,28 +67,27 @@ async function getRandomWord (req, res) {
         let result = [];
         const count = parseInt(req.query.count, 10);
         let maxTries = appValues.randomWords.maxApiRepeat;
+        let resultFilled = false;
 
-        const start = Utils.timer();
         while (maxTries > 0) {
             let randomWordPromises = [];
-            let resultFilled = false;
-            for (let tries = 0; tries < count; tries++) {
-                randomWordPromises.push(WordsFetcher.requestRandomWord);
+            for (let i = 0; i < count; i++) {
+                randomWordPromises.push(WordsFetcher.requestRandomWord());
             }
-            let randomWords = await Promise.all(randomWordPromises);
 
+            let randomWords = await Promise.all(randomWordPromises);
             for (let randomWord of randomWords) {
-                if (randomWord && randomWord.word && randomWord.defs) {
+                if (result.length >= count) {
+                    resultFilled = true;
+                    break;
+                }
+
+                if (randomWord && randomWord.word && randomWord.defs && randomWord.defs.length > 0) {
                     result.push({
                         name: randomWord.word,
                         definitions: randomWord.defs.map(Utils.cleanWordDefinition),
                         publishDateUTC: new Date()
                     });
-                }
-
-                if (result.length >= count) {
-                    resultFilled = true;
-                    break;
                 }
             }
 
@@ -99,7 +96,6 @@ async function getRandomWord (req, res) {
             }
             maxTries--;
         }
-        console.log("TIME", Utils.timer(start));
         return res.json(result);
     } catch (err) {
         Logger.error(err.message, err);
@@ -116,56 +112,60 @@ async function getRandomWord (req, res) {
 async function getMemeWord (req, res) {
     try {
         let result = [];
-        const count = parseInt(req.query.count, 10);
-        const maxTries = count + appValues.memeWords.maxApiRepeat;
+        const count = req.query.count;
+        let maxTries = appValues.memeWords.maxApiRepeat;
+        let resultFilled = false;
 
-        for (let tries = 0; tries < maxTries; tries++) {
-            let query = {};
-            let paramName = ExternalApi.memeWords.queryParams.name;
-            let paramValue = ExternalApi.memeWords.queryParams.value;
-            query[paramName] = Utils.getRandomInt(paramValue, paramValue * 10);
+        while (maxTries > 0) {
+            let memeWordPromises = [];
+            for (let i = 0; i < count; i++) {
+                memeWordPromises.push(WordsFetcher.requestMemeWord());
+            }
 
-            // If we define "page" value bigger than 1000 (that value maybe going to change or increase in future) every request would give us random word
-            let html = await rpn.get({
-                url: ExternalApi.memeWords.url,
-                qs: query
-            });
-
-            let word = {definitions: []};
-            let $ = cheerio.load(html);
-
-            $("a.word").each((i, elem) => {
-                let name = $(elem).text().trim();
-                if (name && !ProfanitiesTrie.contains(name)) {
-                    word.name = name;
-                    return false;
+            let memeWords = await Promise.all(memeWordPromises);
+            for (let memeWord of memeWords) {
+                if (result.length >= count) {
+                    resultFilled = true;
+                    break;
                 }
 
-                return true;
-            });
+                let $ = cheerio.load(memeWord);
+                let word = {definitions: []};
 
-            $("div.meaning").each((i, elem) => {
-                let definition = $(elem).text().trim();
-                if (definition && !ProfanitiesTrie.contains(definition)) {
-                    word.definitions.push(definition);
-                    if (word.definitions.length > 3) {
+                $("a.word").each((i, elem) => {
+                    let name = $(elem).text().trim();
+                    if (name && !ProfanitiesTrie.contains(name)) {
+                        word.name = name;
                         return false;
                     }
-                }
 
-                return true;
-            });
-
-            if (word.name && word.definitions.length > 0) {
-                result.push({
-                    ...word,
-                    publishDateUTC: new Date()
+                    return true;
                 });
+
+                $("div.meaning").each((i, elem) => {
+                    let definition = $(elem).text().trim();
+                    if (definition && !ProfanitiesTrie.contains(definition)) {
+                        word.definitions.push(definition);
+                        if (word.definitions.length > 3) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+
+                if (word.name && word.definitions.length > 0) {
+                    result.push({
+                        ...word,
+                        publishDateUTC: new Date()
+                    });
+                }
             }
 
-            if (result.length >= count) {
-                tries = maxTries;
+            if (resultFilled) {
+                break;
             }
+            maxTries--;
         }
         return res.json(result);
     } catch (err) {

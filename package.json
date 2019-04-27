@@ -19,12 +19,14 @@
   ],
   "scripts": {
     "start": "node ./bin/server.dev.js",
-    "dev": "nodemon ./bin/server.dev.js"
+    "dev": "cross-env NODE_ENV=development nodemon --inspect ./bin/server.dev.js",
+    "eslintServer": "./node_modules/.bin/eslint ./"
   },
   "private": true,
   "dependencies": {
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.3",
+    "cross-env": "^5.2.0",
     "debug": "^4.1.1",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
