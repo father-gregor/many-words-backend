@@ -8,6 +8,7 @@ const Models = require("../database/mongoose.models");
 const appValues = require("../../config/app.values.json");
 const Utils = require("../services/utils.service");
 const Logger = require("../services/logger.service");
+const WordsFetcher = require("../services/words-fetcher.service");
 const ExternalApi = require("../../config/external-api.values.json");
 const profanitiesValues = require("../../config/profanities.json");
 
@@ -65,41 +66,38 @@ async function getDailyWord (req, res) {
  */
 async function getRandomWord (req, res) {
     try {
-        let wildcard = "";
         let result = [];
         const count = parseInt(req.query.count, 10);
-        const maxTries = count + appValues.randomWords.maxApiRepeat;
-        let min = appValues.randomWords.wildcard.min;
-        let max = appValues.randomWords.wildcard.max;
+        let maxTries = appValues.randomWords.maxApiRepeat;
 
         const start = Utils.timer();
-        for (let tries = 0; tries < maxTries; tries++) {
-            let wildcardLength = Utils.getRandomInt(min, max);
-            // TODO Optimize process to append two-three symbols prefix for more randomized result
-            for (let i = 0; i < wildcardLength; i++) {
-                wildcard = `${wildcard}?`;
+        while (maxTries > 0) {
+            let randomWordPromises = [];
+            let resultFilled = false;
+            for (let tries = 0; tries < count; tries++) {
+                this.randomWordPromises.push(this.WordsFetcher.requestRandomWord);
             }
-            let randomWords = await rpn.get({
-                url: ExternalApi.randomWords.url,
-                qs: {
-                    sp: wildcard,
-                    md: "d"
-                },
-                json: true
-            });
-            let finalRandomWord = randomWords[Utils.getRandomInt(0, randomWords.length)];
+            let randomWords = await Promise.all(randomWordPromises);
 
-            if (finalRandomWord && finalRandomWord.word && finalRandomWord.defs) {
-                result.push({
-                    name: finalRandomWord.word,
-                    definitions: finalRandomWord.defs.map(def => Utils.cleanWordDefinition(def)),
-                    publishDateUTC: new Date()
-                });
+            for (let randomWord of randomWords) {
+                if (randomWord && randomWord.word && randomWord.defs) {
+                    result.push({
+                        name: randomWord.word,
+                        definitions: randomWord.defs.map(Utils.cleanWordDefinition),
+                        publishDateUTC: new Date()
+                    });
+                }
+
+                if (result.length >= count) {
+                    resultFilled = true;
+                    break;
+                }
             }
 
-            if (result.length >= count) {
-                tries = maxTries;
+            if (resultFilled) {
+                break;
             }
+            maxTries--;
         }
         console.log("TIME", Utils.timer(start));
         return res.json(result);
