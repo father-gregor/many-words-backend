@@ -8,5 +8,11 @@
             "name": "page",
             "value": 10001
         }
+    },
+    "searchWords": {
+        "url": "https://api.datamuse.com/words"
+    },
+    "synonymsWords": {
+        "url": "https://api.datamuse.com/words"
     }
 }

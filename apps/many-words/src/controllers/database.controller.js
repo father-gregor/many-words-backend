@@ -13,6 +13,9 @@ const DailyWord = Models.DailyWord;
 
 async function fillDailyWordsDatabase (req, res) {
     let collectedWords;
+    if (!req.query.secret || req.query.secret !== process.env.SECRET) {
+        return res.status(403).send("Don't even try if you forgot our secret");
+    }
     try {
         collectedWords = await WordCollector.collect({wordsCount: 30});
         if (!collectedWords) {

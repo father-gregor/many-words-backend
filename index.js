@@ -13,6 +13,11 @@ const mongoDb = require("./database/mongodb.connection");
 
 mongoDb.connectToDb();
 
+// Execute migrations
+const manyWordsMigrations = require("./apps/many-words/db.migrations");
+
+manyWordsMigrations.executeMigrations();
+
 const app = express();
 
 app.use(logger("dev"));

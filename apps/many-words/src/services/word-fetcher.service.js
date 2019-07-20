@@ -41,7 +41,22 @@ async function requestMemeWord () {
     });
 }
 
+async function requestWordSynonyms (word) {
+    const synonyms = await rpn.get({
+        url: ExternalApi.synonymsWords.url,
+        qs: {
+            rel_syn: word,
+            md: "d"
+        },
+        json: true
+    });
+    console.log(synonyms);
+
+    return synonyms ? synonyms.map(s => s.word) : [];
+}
+
 module.exports = {
     requestRandomWord,
-    requestMemeWord
+    requestMemeWord,
+    requestWordSynonyms
 };

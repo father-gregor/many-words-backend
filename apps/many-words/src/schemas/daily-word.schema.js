@@ -16,6 +16,11 @@ const DailyWordSchema = new mongoose.Schema({
         required: true,
         lowercase: true
     }],
+    synonyms: [{
+        type: String,
+        required: true,
+        lowercase: true
+    }],
     language: {
         type: String,
         enum: ["en"],

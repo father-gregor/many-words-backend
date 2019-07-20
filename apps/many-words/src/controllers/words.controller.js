@@ -92,6 +92,17 @@ async function getRandomWord (req, res) {
             }
             maxTries--;
         }
+
+        const synonymsPromises = [];
+        for (let word of result) {
+            synonymsPromises.push(WordFetcher.requestWordSynonyms(word.name).then((synonyms) => {
+                if (synonyms) {
+                    word.synonyms = synonyms;
+                }
+            }));
+        }
+        await Promise.all(synonymsPromises);
+
         return res.json(result);
     } catch (err) {
         Logger.error(err.message, err);
@@ -172,7 +183,17 @@ async function getMemeWord (req, res) {
         }
         return res.json(result);
     } catch (err) {
-        Logger.error(err.message, err);
+        Logger.error(err.message, err.response ? {
+            type: err.type,
+            error: err.error,
+            message: err.message,
+            statusCode: err.statusCode,
+            options: {
+                url: err.options.url,
+                method: err.options.method,
+                qs: JSON.stringify(err.options.qs)
+            }
+        } : err);
         return res.status(500).send();
     }
 }
