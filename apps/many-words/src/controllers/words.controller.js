@@ -71,7 +71,8 @@ async function getRandomWord (req, res) {
                 randomWordPromises.push(WordFetcher.requestRandomWord());
             }
 
-            let randomWords = await Promise.all(randomWordPromises);
+            const results = await Promise.all(randomWordPromises.map(p => p.catch(e => e)));
+            let randomWords = results.filter(r => !(r instanceof Error));
             for (let randomWord of randomWords) {
                 if (result.length >= count) {
                     resultFilled = true;
@@ -130,7 +131,8 @@ async function getMemeWord (req, res) {
                 memeWordPromises.push(WordFetcher.requestMemeWord());
             }
 
-            let memeWords = await Promise.all(memeWordPromises);
+            const results = await Promise.all(memeWordPromises.map(p => p.catch(e => e)));
+            const memeWords = results.filter(r => !(r instanceof Error));
             for (let memeWord of memeWords) {
                 if (result.length >= count) {
                     resultFilled = true;
