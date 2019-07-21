@@ -20,7 +20,7 @@
   "scripts": {
     "start": "node ./bin/server.dev.js",
     "dev": "cross-env NODE_ENV=development nodemon --inspect ./bin/server.dev.js",
-    "executeMigrations": "node ./apps/many-words/migrations.js",
+    "migrations": "node ./index.migrations.js",
     "eslintServer": "./node_modules/.bin/eslint ./"
   },
   "private": true,

@@ -6,17 +6,7 @@ const path = require("path");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
 
-// Load .env file for local development
-require("dotenv").config();
-
-const mongoDb = require("./database/mongodb.connection");
-
-mongoDb.connectToDb();
-
-// Execute migrations
-const manyWordsMigrations = require("./apps/many-words/db.migrations");
-
-manyWordsMigrations.executeMigrations();
+require("./common/server.common");
 
 const app = express();
 
