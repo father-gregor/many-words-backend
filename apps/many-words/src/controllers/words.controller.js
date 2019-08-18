@@ -40,11 +40,11 @@ async function getDailyWord (req, res) {
         }
 
         let words = await DailyWord.find(query).sort({publishDateUTC: -1}).limit(parseInt(req.query.count, 10) || 1).exec();
-        if (words && Array.isArray(words)) {
-            return res.json(words);
+        if (!words || !Array.isArray(words)) {
+            return res.status(404).send();
         }
 
-        return res.status(404).send();
+        return res.json(words);
     } catch (err) {
         Logger.error(err.message, err);
         return res.status(500).send();
