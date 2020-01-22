@@ -1,6 +1,7 @@
 "use strict";
 
 const rpn = require("request-promise-native");
+const urbanDictionary = require("urban-dictionary");
 
 const appValues = require("../../config/app.values.json");
 const Utils = require("../services/utils.service");
@@ -10,12 +11,15 @@ async function requestRandomWord () {
     let wildcard = "";
     let min = appValues.randomWords.wildcard.min;
     let max = appValues.randomWords.wildcard.max;
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
     let wildcardLength = Utils.getRandomInt(min, max);
 
     // TODO Optimize process to append two-three symbols prefix for more randomized result
+    wildcard = alphabet.charAt(Utils.getRandomInt(0, alphabet.length - 1));
     for (let i = 0; i < wildcardLength; i++) {
-        wildcard = `${wildcard}?`;
+        wildcard += "?";
     }
+
     let randomWords = await rpn.get({
         url: ExternalApi.randomWords.url,
         qs: {
@@ -29,6 +33,15 @@ async function requestRandomWord () {
 }
 
 async function requestMemeWord () {
+    const memeResult = await urbanDictionary.random();
+    return {
+        word: memeResult.word.replace(/\[|\]/gm, ""),
+        definition: memeResult.definition.replace(/\[|\]/gm, "")
+    };
+}
+
+/** TODO Legacy method for retrieving meme words
+async function requestMemeWord () {
     let query = {};
     let paramName = ExternalApi.memeWords.queryParams.name;
     let paramValue = ExternalApi.memeWords.queryParams.value;
@@ -40,6 +53,7 @@ async function requestMemeWord () {
         qs: query
     });
 }
+*/
 
 async function requestWordSynonyms (word) {
     const synonyms = await rpn.get({

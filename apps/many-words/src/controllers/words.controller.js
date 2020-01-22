@@ -1,7 +1,5 @@
 "use strict";
 
-const cheerio = require("cheerio");
-
 const Models = require("../../models");
 const appValues = require("../../config/app.values.json");
 const Utils = require("../services/utils.service");
@@ -115,11 +113,12 @@ async function getRandomWord (req, res) {
  * Query params:
  * @param {*} req
  * @param {String} req.query.count - count of words to return
+ * @param {Boolean} req.query.checkProfanities - if present word and definitions would be checked for profanities
  * @param {*} res
  */
 async function getMemeWord (req, res) {
     try {
-        let result = [];
+        let results = [];
         const count = req.query.count;
         const checkProfanities = req.query.checkProfanities;
         let maxTries = appValues.memeWords.maxApiRepeat;
@@ -131,51 +130,27 @@ async function getMemeWord (req, res) {
                 memeWordPromises.push(WordFetcher.requestMemeWord());
             }
 
-            const results = await Promise.all(memeWordPromises.map(p => p.catch(e => e)));
-            const memeWords = results.filter(r => !(r instanceof Error));
+            const promisesResults = await Promise.all(memeWordPromises.map(p => p.catch((e) => {
+                Logger.error("Failed to fetch meme word", e);
+                return e;
+            })));
+
+            const memeWords = promisesResults.filter(r => !(r instanceof Error));
             for (let memeWord of memeWords) {
-                if (result.length >= count) {
+                if (results.length >= count) {
                     resultFilled = true;
                     break;
                 }
 
-                let $ = cheerio.load(memeWord);
-                let word = {definitions: []};
-
-                $("a.word").each((i, elem) => {
-                    let name = $(elem).text().trim();
-                    if (name) {
-                        const allowed = checkProfanities ? !WordUtils.checkForProfanities(name) : true;
-                        if (allowed) {
-                            word.name = name;
-                            return false;
-                        }
-                    }
-
-                    return true;
-                });
-
-                $("div.meaning").each((i, elem) => {
-                    let definition = $(elem).text().trim();
-                    if (definition) {
-                        const allowed = checkProfanities ? !WordUtils.checkForProfanities(definition) : true;
-                        if (allowed) {
-                            word.definitions.push(definition);
-                        }
-                    }
-                    if (word.definitions.length > 3) {
-                        return false;
-                    }
-
-                    return true;
-                });
-
-                if (word.name && word.definitions.length > 0) {
-                    result.push({
-                        ...word,
-                        publishDateUTC: new Date()
-                    });
+                const isProhibitedWord = checkProfanities && (WordUtils.checkForProfanities(memeWord.word) || WordUtils.checkForProfanities(memeWord.definition));
+                if (results.find(v => v.word === memeWord.word) || isProhibitedWord) {
+                    continue;
                 }
+
+                results.push({
+                    ...memeWord,
+                    publishDateUTC: new Date()
+                });
             }
 
             if (resultFilled) {
@@ -183,7 +158,7 @@ async function getMemeWord (req, res) {
             }
             maxTries--;
         }
-        return res.json(result);
+        return res.json(results);
     } catch (err) {
         Logger.error(err.message, err.response ? {
             type: err.type,
@@ -196,6 +171,7 @@ async function getMemeWord (req, res) {
                 qs: JSON.stringify(err.options.qs)
             }
         } : err);
+
         return res.status(500).send();
     }
 }
